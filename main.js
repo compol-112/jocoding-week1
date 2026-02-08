@@ -2,9 +2,37 @@ const generateBtn = document.getElementById('generate-btn');
 const lottoNumbersDiv = document.querySelector('.lotto-numbers');
 const historyList = document.getElementById('history-list');
 const yearSpan = document.getElementById('year');
+const themeToggle = document.getElementById('theme-toggle');
+const themeText = document.getElementById('theme-text');
+const body = document.body;
 
 const generatedNumbers = new Set();
 let history = [];
+
+const applyTheme = (isDarkMode) => {
+    if (isDarkMode) {
+        body.classList.add('dark-mode');
+        themeText.textContent = 'Dark Mode';
+    } else {
+        body.classList.remove('dark-mode');
+        themeText.textContent = 'Light Mode';
+    }
+    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+};
+
+const toggleTheme = () => {
+    const isDarkMode = body.classList.contains('dark-mode');
+    applyTheme(!isDarkMode);
+};
+
+const loadTheme = () => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        applyTheme(true);
+    } else {
+        applyTheme(false);
+    }
+};
 
 const generateNumbers = () => {
     generatedNumbers.clear();
@@ -63,8 +91,10 @@ const setYear = () => {
 };
 
 generateBtn.addEventListener('click', generateNumbers);
+themeToggle.addEventListener('click', toggleTheme);
 
 window.addEventListener('load', () => {
     loadHistory();
     setYear();
+    loadTheme();
 });
