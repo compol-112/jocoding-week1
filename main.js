@@ -1,13 +1,12 @@
 const generateBtn = document.getElementById('generate-btn');
 const lottoNumbersDiv = document.querySelector('.lotto-numbers');
-const historyList = document.getElementById('history-list');
 const yearSpan = document.getElementById('year');
 const themeToggle = document.getElementById('theme-toggle');
 const themeText = document.getElementById('theme-text');
+const retryBtn = document.getElementById('retry-btn'); // New
 const body = document.body;
 
 const generatedNumbers = new Set();
-let history = [];
 
 const applyTheme = (isDarkMode) => {
     if (isDarkMode) {
@@ -36,14 +35,14 @@ const loadTheme = () => {
 
 const generateNumbers = () => {
     generatedNumbers.clear();
-    while (generatedNumbers.size < 6) {
+    while (generatedNumbers.size < 5) { // Changed from 6 to 5
         const randomNumber = Math.floor(Math.random() * 45) + 1;
         generatedNumbers.add(randomNumber);
     }
 
     const numbersArray = Array.from(generatedNumbers).sort((a, b) => a - b);
     displayNumbers(numbersArray);
-    addToHistory(numbersArray);
+    retryBtn.disabled = false; // Enable retry button after generation
 };
 
 const displayNumbers = (numbers) => {
@@ -56,35 +55,6 @@ const displayNumbers = (numbers) => {
     });
 };
 
-const addToHistory = (numbers) => {
-    const numbersString = numbers.join(', ');
-    history.unshift(numbersString);
-
-    if (history.length > 10) {
-        history.pop();
-    }
-
-    localStorage.setItem('lotto_history', JSON.stringify(history));
-    displayHistory();
-};
-
-const displayHistory = () => {
-    historyList.innerHTML = '';
-    history.forEach(item => {
-        const listItem = document.createElement('li');
-        listItem.textContent = item;
-        historyList.appendChild(listItem);
-    });
-};
-
-const loadHistory = () => {
-    const savedHistory = localStorage.getItem('lotto_history');
-    if (savedHistory) {
-        history = JSON.parse(savedHistory);
-        displayHistory();
-    }
-};
-
 const setYear = () => {
     const currentYear = new Date().getFullYear();
     yearSpan.textContent = currentYear;
@@ -92,9 +62,11 @@ const setYear = () => {
 
 generateBtn.addEventListener('click', generateNumbers);
 themeToggle.addEventListener('click', toggleTheme);
+retryBtn.addEventListener('click', generateNumbers); // New event listener for retry button
 
 window.addEventListener('load', () => {
-    loadHistory();
     setYear();
     loadTheme();
+    // Initial state of retry button
+    retryBtn.disabled = true; // Initially disable the retry button
 });

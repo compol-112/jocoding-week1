@@ -89,36 +89,39 @@ h1 {
     box-shadow: 0 6px 12px rgba(74, 144, 226, 0.4);
 }
 
-.history {
-    margin-top: 30px;
-}
 
-h2 {
-    color: var(--primary-color);
-    margin-bottom: 15px;
-}
-
-#history-list {
-    list-style: none;
-    padding: 0;
-    max-height: 200px;
-    overflow-y: auto;
-}
-
-#history-list li {
-    background-color: #f9f9f9;
-    border-radius: 6px;
-    padding: 10px;
-    margin-bottom: 8px;
-    font-size: 0.9rem;
-    color: #666;
-}
 
 footer {
     margin-top: 40px;
     color: var(--primary-color);
     font-size: 1.1rem;
     opacity: 0.8;
+}
+
+.action-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.action-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(74, 144, 226, 0.4);
+}
+
+.action-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    box-shadow: none;
 }
 
 .theme-switch-container {
