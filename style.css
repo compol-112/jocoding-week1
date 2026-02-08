@@ -55,6 +55,10 @@ h1 {
     display: flex;
     justify-content: center;
     gap: 10px;
+    margin-bottom: 15px; /* Adjusted for multiple rows */
+}
+
+#lotto-numbers-container {
     margin-bottom: 30px;
 }
 
