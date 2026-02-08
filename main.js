@@ -3,10 +3,11 @@ const lottoNumbersDiv = document.querySelector('.lotto-numbers');
 const yearSpan = document.getElementById('year');
 const themeToggle = document.getElementById('theme-toggle');
 const themeText = document.getElementById('theme-text');
-const retryBtn = document.getElementById('retry-btn'); // New
+const retryBtn = document.getElementById('retry-btn');
 const body = document.body;
 
 const generatedNumbers = new Set();
+const NUMBER_COUNT = 5;
 
 const applyTheme = (isDarkMode) => {
     if (isDarkMode) {
@@ -33,26 +34,31 @@ const loadTheme = () => {
     }
 };
 
+const displayNumbersSequentially = async (numbers) => {
+    lottoNumbersDiv.innerHTML = '';
+    for (let i = 0; i < numbers.length; i++) {
+        const number = numbers[i];
+        const numberDiv = document.createElement('div');
+        numberDiv.classList.add('number');
+        numberDiv.textContent = '?';
+        lottoNumbersDiv.appendChild(numberDiv);
+        
+        await new Promise(resolve => setTimeout(resolve, 500));
+        numberDiv.textContent = number;
+    }
+    retryBtn.disabled = false;
+};
+
 const generateNumbers = () => {
+    retryBtn.disabled = true;
     generatedNumbers.clear();
-    while (generatedNumbers.size < 5) { // Changed from 6 to 5
+    while (generatedNumbers.size < NUMBER_COUNT) {
         const randomNumber = Math.floor(Math.random() * 45) + 1;
         generatedNumbers.add(randomNumber);
     }
 
     const numbersArray = Array.from(generatedNumbers).sort((a, b) => a - b);
-    displayNumbers(numbersArray);
-    retryBtn.disabled = false; // Enable retry button after generation
-};
-
-const displayNumbers = (numbers) => {
-    lottoNumbersDiv.innerHTML = '';
-    numbers.forEach(number => {
-        const numberDiv = document.createElement('div');
-        numberDiv.classList.add('number');
-        numberDiv.textContent = number;
-        lottoNumbersDiv.appendChild(numberDiv);
-    });
+    displayNumbersSequentially(numbersArray);
 };
 
 const setYear = () => {
@@ -62,11 +68,10 @@ const setYear = () => {
 
 generateBtn.addEventListener('click', generateNumbers);
 themeToggle.addEventListener('click', toggleTheme);
-retryBtn.addEventListener('click', generateNumbers); // New event listener for retry button
+retryBtn.addEventListener('click', generateNumbers);
 
 window.addEventListener('load', () => {
     setYear();
     loadTheme();
-    // Initial state of retry button
-    retryBtn.disabled = true; // Initially disable the retry button
+    retryBtn.disabled = true;
 });
